@@ -12,10 +12,19 @@ export async function OPTIONS() {
   });
 }
 
-export async function POST({ request, env }) {
+export async function POST({ request, env, context }) {
+  // Access environment variables from context
+  const POSTMARK_API_KEY = context?.env?.POSTMARK_API_KEY || env?.POSTMARK_API_KEY;
   try {
     // Check if API key is available
-    const POSTMARK_API_KEY = env.POSTMARK_API_KEY;
+    if (!POSTMARK_API_KEY) {
+      console.error('Environment check:', { 
+        hasEnv: !!env,
+        hasContext: !!context,
+        hasContextEnv: !!(context?.env)
+      });
+      throw new Error('API key not configured - check environment variables');
+    }
     console.log('Using Postmark API');
     
     if (!POSTMARK_API_KEY) {
