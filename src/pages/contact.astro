@@ -24,6 +24,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 					try {
 						const formData = new FormData(form);
 						const response = await fetch('https://denmelnychuk.5358207.workers.dev/api/send-email', {
+							mode: 'cors',
 							method: 'POST',
 							body: JSON.stringify({
 								name: formData.get('name'),
@@ -45,8 +46,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 							throw new Error(data.error || 'Failed to send message');
 						}
 					} catch (error) {
+						console.error('Form submission error:', error);
 						messageDiv.className = 'form-message error';
-						messageDiv.textContent = `Failed to send message: ${error.message}. Please try again.`;
+						messageDiv.textContent = `Failed to send message: ${error.message || 'Network error'}. Please try again.`;
 					} finally {
 						button.disabled = false;
 						button.textContent = 'Send Message';
