@@ -156,6 +156,11 @@ hr {
   white-space: nowrap;
 }
 
+.profile-image {
+  border-radius: 5%;
+  margin: 2rem auto;
+  display: block;
+}
 
 .section {
   margin: 4rem 0;
