@@ -2,6 +2,11 @@ export const prerender = false;
 
 export async function POST({ request, env }) {
   try {
+    // Check if API key is available
+    if (!env.POSTMARK_API_KEY) {
+      console.error('Postmark API key is not set');
+      throw new Error('API key not configured');
+    }
     const POSTMARK_API_KEY = env.POSTMARK_API_KEY; // Access env variable in Cloudflare
     const TO_EMAIL = '5358207@gmail.com'; // Email to receive messages
 
@@ -32,8 +37,13 @@ export async function POST({ request, env }) {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to send email');
+      const errorData = await response.json();
+      console.error('Postmark API error:', errorData);
+      throw new Error(`Failed to send email: ${errorData.Message || 'Unknown error'}`);
     }
+
+    const responseData = await response.json();
+    console.log('Email sent successfully:', responseData);
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
@@ -42,7 +52,11 @@ export async function POST({ request, env }) {
       }
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error('Error in send-email endpoint:', error);
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      details: error.toString()
+    }), {
       status: 500,
       headers: {
         'Content-Type': 'application/json'

@@ -36,16 +36,17 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 							}
 						});
 
+						const data = await response.json();
 						if (response.ok) {
 							messageDiv.className = 'form-message success';
 							messageDiv.textContent = 'Message sent successfully!';
 							form.reset();
 						} else {
-							throw new Error('Failed to send message');
+							throw new Error(data.error || 'Failed to send message');
 						}
 					} catch (error) {
 						messageDiv.className = 'form-message error';
-						messageDiv.textContent = 'Failed to send message. Please try again.';
+						messageDiv.textContent = `Failed to send message: ${error.message}. Please try again.`;
 					} finally {
 						button.disabled = false;
 						button.textContent = 'Send Message';
