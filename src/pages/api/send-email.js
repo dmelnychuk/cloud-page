@@ -1,8 +1,8 @@
 export const prerender = false;
 
-export async function POST({ request }) {
+export async function POST({ request, env }) {
   try {
-    const POSTMARK_API_KEY = process.env.POSTMARK_API_KEY; // Using environment variable for security
+    const POSTMARK_API_KEY = env.POSTMARK_API_KEY; // Access env variable in Cloudflare
     const TO_EMAIL = '5358207@gmail.com'; // Email to receive messages
 
     const data = await request.json();

@@ -1,0 +1,8 @@
+[vars]
+POSTMARK_API_KEY = ""  # Leave empty, will be filled by Cloudflare
+
+[env.production]
+vars = { POSTMARK_API_KEY = "" }  # Production environment variables
+
+[env.development]
+vars = { POSTMARK_API_KEY = "" }  # Development environment variables
