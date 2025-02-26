@@ -1,9 +1,6 @@
 export const prerender = false;
 
-export async function POST({ request }) {
-  const env = {
-    POSTMARK_API_KEY: '76968593-f7ac-4522-a85d-834128e0f41f'
-  };
+export async function POST({ request, env }) {
   try {
     // Check if API key is available
     const POSTMARK_API_KEY = env.POSTMARK_API_KEY;
