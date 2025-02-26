@@ -1,12 +1,17 @@
 export const prerender = false;
 
 export async function POST({ request }) {
+  const env = {
+    POSTMARK_API_KEY: '76968593-f7ac-4522-a85d-834128e0f41f'
+  };
   try {
     // Check if API key is available
-    const POSTMARK_API_KEY = import.meta.env.POSTMARK_API_KEY;
+    const POSTMARK_API_KEY = env.POSTMARK_API_KEY;
+    console.log('Using Postmark API');
+    
     if (!POSTMARK_API_KEY) {
       console.error('Postmark API key is not set');
-      throw new Error('API key not configured');
+      throw new Error('API key not configured - please check environment variables');
     }
     const TO_EMAIL = '5358207@gmail.com'; // Email to receive messages
 

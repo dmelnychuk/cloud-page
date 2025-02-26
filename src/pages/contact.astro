@@ -23,7 +23,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					try {
 						const formData = new FormData(form);
-						const response = await fetch('/api/send-email', {
+						const response = await fetch('https://denmelnychuk.5358207.workers.dev/api/send-email', {
 							method: 'POST',
 							body: JSON.stringify({
 								name: formData.get('name'),
@@ -59,7 +59,10 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<Header />
 		<main>
 			<h1>Contact me!</h1>
-			<h2>Do what you love and love what you do.</h2>
+            </br>
+            <i>
+			<h2>"Do what you love and love what you do."</h2>
+            </i>
 			<p>
 				I truly love what I'm doing and I'm always looking for new ways to improve.
 				If you want to get in touch, please fill the form below.
