@@ -12,14 +12,10 @@ export default defineConfig({
       'import.meta.env.POSTMARK_API_KEY': JSON.stringify(process.env.POSTMARK_API_KEY),
     },
   },
-  site: "https://example.com",
+  site: "https://www.denmelnychuk.com",
   integrations: [mdx(), sitemap()],
   output: 'server',
   adapter: cloudflare({
-    runtime: {
-      mode: 'local',
-      type: 'pages',
-    },
     mode: 'directory',
     platformProxy: {
       enabled: true,
