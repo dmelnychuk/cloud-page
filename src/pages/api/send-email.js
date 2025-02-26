@@ -2,8 +2,8 @@ export const prerender = false;
 
 export async function POST({ request }) {
   try {
-    const POSTMARK_API_KEY = 'YOUR_POSTMARK_API_KEY'; // Replace with your actual API key
-    const TO_EMAIL = 'your@email.com'; // Replace with your email address
+    const POSTMARK_API_KEY = process.env.POSTMARK_API_KEY; // Using environment variable for security
+    const TO_EMAIL = '5358207@gmail.com'; // Email to receive messages
 
     const data = await request.json();
     const { name, email, subject, message } = data;
@@ -16,7 +16,7 @@ export async function POST({ request }) {
         'X-Postmark-Server-Token': POSTMARK_API_KEY
       },
       body: JSON.stringify({
-        From: 'your@email.com', // Replace with your verified sender email
+        From: 'info@denmelnychuk.com', // Verified sender email
         To: TO_EMAIL,
         Subject: `Contact Form: ${subject}`,
         TextBody: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,

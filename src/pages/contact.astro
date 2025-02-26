@@ -3,7 +3,6 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import { handleSubmit } from '../scripts/contact-form.js';
 ---
 
 <!doctype html>
@@ -11,8 +10,48 @@ import { handleSubmit } from '../scripts/contact-form.js';
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<script>
-			// Make handleSubmit available in the global scope
-			window.handleSubmit = handleSubmit;
+			document.addEventListener('DOMContentLoaded', () => {
+				const form = document.querySelector('.contact-form');
+				form.addEventListener('submit', async (event) => {
+					event.preventDefault();
+					const button = form.querySelector('button');
+					const messageDiv = document.getElementById('form-message');
+
+					// Disable button and show loading state
+					button.disabled = true;
+					button.textContent = 'Sending...';
+
+					try {
+						const formData = new FormData(form);
+						const response = await fetch('/api/send-email', {
+							method: 'POST',
+							body: JSON.stringify({
+								name: formData.get('name'),
+								email: formData.get('email'),
+								subject: formData.get('subject'),
+								message: formData.get('message')
+							}),
+							headers: {
+								'Content-Type': 'application/json'
+							}
+						});
+
+						if (response.ok) {
+							messageDiv.className = 'form-message success';
+							messageDiv.textContent = 'Message sent successfully!';
+							form.reset();
+						} else {
+							throw new Error('Failed to send message');
+						}
+					} catch (error) {
+						messageDiv.className = 'form-message error';
+						messageDiv.textContent = 'Failed to send message. Please try again.';
+					} finally {
+						button.disabled = false;
+						button.textContent = 'Send Message';
+					}
+				});
+			});
 		</script>
 	</head>
 	<body>
@@ -25,7 +64,7 @@ import { handleSubmit } from '../scripts/contact-form.js';
 				If you want to get in touch, please fill the form below.
 			</p>
 
-			<form class="contact-form" onsubmit="handleSubmit(event)">
+			<form class="contact-form">
 				<div class="form-group">
 					<label for="name">Name</label>
 					<input
