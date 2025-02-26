@@ -9,22 +9,106 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<script>
+			const handleSubmit = async (event) => {
+				event.preventDefault();
+				const form = event.target;
+				const button = form.querySelector('button');
+				const messageDiv = document.getElementById('form-message');
+
+				// Disable button and show loading state
+				button.disabled = true;
+				button.textContent = 'Sending...';
+
+				try {
+					const formData = new FormData(form);
+					const response = await fetch('/api/send-email', {
+						method: 'POST',
+						body: JSON.stringify({
+							name: formData.get('name'),
+							email: formData.get('email'),
+							subject: formData.get('subject'),
+							message: formData.get('message')
+						}),
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					});
+
+					if (response.ok) {
+						messageDiv.className = 'form-message success';
+						messageDiv.textContent = 'Message sent successfully!';
+						form.reset();
+					} else {
+						throw new Error('Failed to send message');
+					}
+				} catch (error) {
+					messageDiv.className = 'form-message error';
+					messageDiv.textContent = 'Failed to send message. Please try again.';
+				} finally {
+					button.disabled = false;
+					button.textContent = 'Send Message';
+				}
+			};
+		</script>
 	</head>
 	<body>
 		<Header />
 		<main>
 			<h1>Contact me!</h1>
-            <h2>
-            Do what you love and love what you do.
-            </h2>
+			<h2>Do what you love and love what you do.</h2>
 			<p>
-				I truly love what I'm doing and I'm always looking for new ways to improve
-                If you want to get in touch, please fill the form below.
+				I truly love what I'm doing and I'm always looking for new ways to improve.
+				If you want to get in touch, please fill the form below.
 			</p>
-            <button>Contact me!</button>
 
+			<form class="contact-form" onsubmit="handleSubmit(event)">
+				<div class="form-group">
+					<label for="name">Name</label>
+					<input
+						type="text"
+						id="name"
+						name="name"
+						required
+						placeholder="Your name"
+					/>
+				</div>
 
+				<div class="form-group">
+					<label for="email">Email</label>
+					<input
+						type="email"
+						id="email"
+						name="email"
+						required
+						placeholder="your@email.com"
+					/>
+				</div>
 
+				<div class="form-group">
+					<label for="subject">Subject</label>
+					<input
+						type="text"
+						id="subject"
+						name="subject"
+						required
+						placeholder="What's this about?"
+					/>
+				</div>
+
+				<div class="form-group">
+					<label for="message">Message</label>
+					<textarea
+						id="message"
+						name="message"
+						required
+						placeholder="Your message here..."
+					></textarea>
+				</div>
+
+				<button type="submit" class="submit-button">Send Message</button>
+				<div id="form-message"></div>
+			</form>
 		</main>
 		<Footer />
 	</body>

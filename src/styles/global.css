@@ -5,8 +5,8 @@
  */
 
 :root {
-  --accent: #2337ff;
-  --accent-dark: #000d8a;
+  --accent: #e589477a;
+  --accent-dark: #d073477a;
   --black: 15, 18, 25;
   --gray: 96, 115, 159;
   --gray-light: 229, 233, 240;
@@ -206,4 +206,86 @@ hr {
   transform: translateY(-5px);
   box-shadow: var(--box-shadow);
   border-color: var(--accent);
+}
+
+/* Contact Form Styles */
+.contact-form {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: var(--box-shadow);
+  margin: 2rem 0;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: rgb(var(--gray-dark));
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid rgba(var(--gray-light), 1);
+  border-radius: 5px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-dark);
+}
+
+.form-group textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.submit-button {
+  background: var(--accent);
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.submit-button:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+}
+
+.submit-button:disabled {
+  background: rgba(var(--gray), 0.5);
+  cursor: not-allowed;
+}
+
+.form-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.form-message.success {
+  background: rgba(75, 181, 67, 0.1);
+  color: #4bb543;
+}
+
+.form-message.error {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff0000;
 }
