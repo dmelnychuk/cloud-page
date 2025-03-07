@@ -2,16 +2,5 @@ name = "denmelnychuk"
 main = "src/pages/api/send-email.js"
 compatibility_date = "2024-02-26"
 
-# Environment variables are managed in Cloudflare Dashboard
 [vars]
-
-[build]
-command = "npm run build"
-
-[[rules]]
-type = "ESModule"
-globs = ["**/*.js"]
-
-[site]
-bucket = "./dist"
-
+POSTMARK_API_KEY = "76968593-f7ac-4522-a85d-834128e0f41f"

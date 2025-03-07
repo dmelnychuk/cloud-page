@@ -1,30 +1,12 @@
 export const prerender = false;
 
-// Handle CORS preflight requests
-export async function OPTIONS() {
-  return new Response(null, {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Max-Age': '86400',
-    },
-  });
-}
-
-export async function POST({ request, env, context }) {
-  // Access environment variables from context
-  const POSTMARK_API_KEY = context?.env?.POSTMARK_API_KEY || env?.POSTMARK_API_KEY;
+export async function POST({ request }) {
+  const env = {
+    POSTMARK_API_KEY: '76968593-f7ac-4522-a85d-834128e0f41f'
+  };
   try {
     // Check if API key is available
-    if (!POSTMARK_API_KEY) {
-      console.error('Environment check:', { 
-        hasEnv: !!env,
-        hasContext: !!context,
-        hasContextEnv: !!(context?.env)
-      });
-      throw new Error('API key not configured - check environment variables');
-    }
+    const POSTMARK_API_KEY = env.POSTMARK_API_KEY;
     console.log('Using Postmark API');
     
     if (!POSTMARK_API_KEY) {
@@ -71,24 +53,15 @@ export async function POST({ request, env, context }) {
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
+        'Content-Type': 'application/json'
       }
     });
   } catch (error) {
     console.error('Error in send-email endpoint:', error);
-    return new Response(JSON.stringify({ 
-      error: error.message,
-      details: error.toString()
-    }), {
+    return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
+        'Content-Type': 'application/json'
       }
     });
   }
