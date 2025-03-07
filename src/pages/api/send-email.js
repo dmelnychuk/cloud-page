@@ -9,7 +9,31 @@ export async function POST({ request, env }) {
     console.log('Environment keys:', env ? Object.keys(env) : 'No env object');
     
     // Get API key from environment variables
-    const POSTMARK_API_KEY = env?.POSTMARK_API_KEY;
+    // Since the env object is not available, we need a different approach
+    let POSTMARK_API_KEY;
+    
+    // Try different ways to access environment variables
+    try {
+      // Try to access from env object
+      if (env && typeof env.POSTMARK_API_KEY !== 'undefined') {
+        POSTMARK_API_KEY = env.POSTMARK_API_KEY;
+        console.log('Got API key from env object');
+      } 
+      // Try to access from process.env (Node.js environment)
+      else if (typeof process !== 'undefined' && process.env && process.env.POSTMARK_API_KEY) {
+        POSTMARK_API_KEY = process.env.POSTMARK_API_KEY;
+        console.log('Got API key from process.env');
+      }
+      // Try to access from global scope (Cloudflare Worker)
+      else if (typeof POSTMARK_API_KEY !== 'undefined') {
+        console.log('Got API key from global scope');
+      }
+      else {
+        console.log('Could not find API key in any environment');
+      }
+    } catch (e) {
+      console.error('Error accessing environment variables:', e);
+    }
     
     // Additional debugging for Cloudflare Worker environment
     console.log('Worker environment check:', {

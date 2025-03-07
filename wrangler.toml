@@ -1,8 +1,12 @@
 name = "denmelnychuk"
-main = "src/pages/api/send-email.js"
+type = "javascript"
+usage_model = "bundled"
 compatibility_date = "2024-02-26"
 
-# Environment variables are configured in Cloudflare Worker settings
-# The [vars] section is required to reference environment variables
+# Main entry point for the worker
+main = "src/pages/api/send-email.js"
+
+# Environment variables configuration
+# This section declares which variables your worker expects
 [vars]
 POSTMARK_API_KEY = "" # Value is stored in Cloudflare Worker settings
