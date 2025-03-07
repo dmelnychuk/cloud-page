@@ -1,12 +1,10 @@
 export const prerender = false;
 
-export async function POST({ request }) {
-  const env = {
-    POSTMARK_API_KEY: '76968593-f7ac-4522-a85d-834128e0f41f'
-  };
+export async function POST({ request, env }) {
   try {
     // Check if API key is available
-    const POSTMARK_API_KEY = env.POSTMARK_API_KEY;
+    // Get API key from environment variables set in Cloudflare Worker settings
+    const POSTMARK_API_KEY = env?.POSTMARK_API_KEY;
     console.log('Using Postmark API');
     
     if (!POSTMARK_API_KEY) {
@@ -18,6 +16,20 @@ export async function POST({ request }) {
     const data = await request.json();
     const { name, email, subject, message } = data;
 
+    // Add CORS headers for preflight requests
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        }
+      });
+    }
+
+    // Log that we're sending an email (without exposing the API key)
+    console.log('Sending email with Postmark API...');
+    
     const response = await fetch('https://api.postmarkapp.com/email', {
       method: 'POST',
       headers: {
@@ -53,7 +65,8 @@ export async function POST({ request }) {
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     });
   } catch (error) {
@@ -61,7 +74,8 @@ export async function POST({ request }) {
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     });
   }
