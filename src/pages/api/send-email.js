@@ -1,15 +1,22 @@
 export const prerender = false;
 
+// Postmark API key should be set in Cloudflare Worker environment variables
+
 export async function POST({ request, env }) {
   try {
     // Debug environment variables
     console.log('Environment object available:', !!env);
     console.log('Environment keys:', env ? Object.keys(env) : 'No env object');
     
-    // Check if API key is available
-    // Get API key from environment variables set in Cloudflare Worker settings
+    // Get API key from environment variables
     const POSTMARK_API_KEY = env?.POSTMARK_API_KEY;
-    console.log('Postmark API Key available:', !!POSTMARK_API_KEY);
+    
+    // Additional debugging for Cloudflare Worker environment
+    console.log('Worker environment check:', {
+      hasEnv: !!env,
+      hasPostmarkKey: !!POSTMARK_API_KEY,
+      isRunningInWorker: typeof globalThis.WorkerGlobalScope !== 'undefined'
+    });
     
     if (!POSTMARK_API_KEY) {
       console.error('Postmark API key is not set');
