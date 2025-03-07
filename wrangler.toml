@@ -7,6 +7,9 @@ compatibility_date = "2024-02-26"
 main = "src/pages/api/send-email.js"
 
 # Environment variables configuration
-# This section declares which variables your worker expects
+# Base variables (available in all environments)
 [vars]
-POSTMARK_API_KEY = "" # Value is stored in Cloudflare Worker settings
+
+# Production environment variables
+[env.production]
+vars = { POSTMARK_API_KEY = "" }  # Production environment variable
